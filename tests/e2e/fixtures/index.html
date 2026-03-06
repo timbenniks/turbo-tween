@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Turbo-Tween E2E Tests</title>
+    <style>
+      .box {
+        width: 100px;
+        height: 100px;
+        background: red;
+        position: absolute;
+        top: 50px;
+        left: 0;
+      }
+      .color-box {
+        width: 100px;
+        height: 100px;
+        background-color: rgb(255, 0, 0);
+        position: absolute;
+        top: 200px;
+        left: 0;
+      }
+      .stagger-item {
+        width: 50px;
+        height: 50px;
+        background: blue;
+        opacity: 0;
+        display: inline-block;
+        margin: 5px;
+        position: relative;
+        top: 350px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box" class="box" data-testid="box"></div>
+    <div id="color-box" class="color-box" data-testid="color-box"></div>
+    <div id="stagger-container" style="position: absolute; top: 350px">
+      <div class="stagger-item" data-testid="stagger-0"></div>
+      <div class="stagger-item" data-testid="stagger-1"></div>
+      <div class="stagger-item" data-testid="stagger-2"></div>
+      <div class="stagger-item" data-testid="stagger-3"></div>
+      <div class="stagger-item" data-testid="stagger-4"></div>
+    </div>
+
+    <script type="module">
+      import { Tween, Timeline, stagger, linear, quadOut, bounceOut } from '../../../src/index.ts';
+
+      // Expose everything globally for Playwright to call
+      window.__turboTween = {
+        Tween,
+        Timeline,
+        stagger,
+        linear,
+        quadOut,
+        bounceOut,
+      };
+
+      // Signal that the module has loaded
+      window.__ready = true;
+    </script>
+  </body>
+</html>

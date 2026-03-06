@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turbo-Tween - Vanilla JS Examples</title>
+    <style>
+      /* ------------------------------------------------------------------ */
+      /* Base / Dark Theme                                                    */
+      /* ------------------------------------------------------------------ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        padding: 2rem 2.5rem 4rem;
+        line-height: 1.5;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 0.25rem;
+        background: linear-gradient(135deg, #e94560, #0f3460);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 2.5rem;
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Section / Demo Card                                                 */
+      /* ------------------------------------------------------------------ */
+      .demo {
+        background: #16213e;
+        border: 1px solid #0f3460;
+        border-radius: 12px;
+        padding: 1.5rem 2rem;
+        margin-bottom: 1.75rem;
+      }
+
+      .demo h2 {
+        font-size: 1.1rem;
+        color: #e94560;
+        margin-bottom: 0.25rem;
+      }
+
+      .demo p.desc {
+        font-size: 0.85rem;
+        color: #888;
+        margin-bottom: 1rem;
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Boxes                                                               */
+      /* ------------------------------------------------------------------ */
+      .box {
+        width: 80px;
+        height: 80px;
+        background: #e94560;
+        border-radius: 10px;
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .box.small {
+        width: 50px;
+        height: 50px;
+        font-size: 0.6rem;
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Buttons                                                             */
+      /* ------------------------------------------------------------------ */
+      .controls {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      button {
+        padding: 0.5rem 1.1rem;
+        border: 1px solid #0f3460;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-family: inherit;
+        transition:
+          background 0.2s,
+          border-color 0.2s;
+      }
+
+      button:hover {
+        background: #0f3460;
+        border-color: #e94560;
+      }
+
+      button:active {
+        transform: scale(0.97);
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Progress bar                                                        */
+      /* ------------------------------------------------------------------ */
+      .progress-track {
+        width: 100%;
+        height: 6px;
+        background: #1a1a2e;
+        border-radius: 3px;
+        margin: 0.75rem 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #e94560, #0f3460);
+        border-radius: 3px;
+        transition: none;
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Stagger items                                                       */
+      /* ------------------------------------------------------------------ */
+      .items {
+        display: flex;
+        gap: 0.6rem;
+        margin: 1rem 0;
+      }
+
+      .item {
+        width: 50px;
+        height: 50px;
+        background: #533483;
+        border-radius: 8px;
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Color demo                                                          */
+      /* ------------------------------------------------------------------ */
+      .color-box {
+        width: 120px;
+        height: 120px;
+        border-radius: 16px;
+        margin: 1rem 0;
+        background-color: #e94560;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Plain object demo                                                   */
+      /* ------------------------------------------------------------------ */
+      .object-display {
+        font-family: 'SF Mono', 'Fira Code', monospace;
+        font-size: 0.85rem;
+        color: #8be9fd;
+        background: #0d1117;
+        padding: 1rem 1.25rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        line-height: 1.6;
+        border: 1px solid #21262d;
+      }
+
+      .object-display .label {
+        color: #bd93f9;
+      }
+      .object-display .value {
+        color: #50fa7b;
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Overwrite demo                                                      */
+      /* ------------------------------------------------------------------ */
+      .overwrite-area {
+        position: relative;
+        height: 120px;
+        margin: 1rem 0;
+      }
+
+      .overwrite-box {
+        width: 80px;
+        height: 80px;
+        background: #ff6348;
+        border-radius: 10px;
+        position: absolute;
+        top: 20px;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .click-counter {
+        font-size: 0.8rem;
+        color: #888;
+        margin-top: 0.5rem;
+      }
+
+      /* ------------------------------------------------------------------ */
+      /* Easings comparison                                                   */
+      /* ------------------------------------------------------------------ */
+      .easing-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .easing-lane {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .easing-lane .label {
+        font-size: 0.7rem;
+        color: #888;
+        text-align: center;
+      }
+
+      .easing-track {
+        width: 100%;
+        height: 200px;
+        background: #1a1a2e;
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .easing-ball {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+      }
+
+      @media (max-width: 800px) {
+        .easing-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Turbo-Tween</h1>
+    <p class="subtitle">Comprehensive vanilla JS demo &mdash; no build step required</p>
+
+    <!-- ================================================================ -->
+    <!-- 1. Basic Tween                                                    -->
+    <!-- ================================================================ -->
+    <div class="demo">
+      <h2>1. Basic Tween</h2>
+      <p class="desc">Animate a box using to(), from(), and fromTo() methods.</p>
+      <div class="box" id="box-basic">BOX</div>
+      <div class="controls">
+        <button id="btn-to">to()</button>
+        <button id="btn-from">from()</button>
+        <button id="btn-fromTo">fromTo()</button>
+        <button id="btn-reset">Reset</button>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- 2. Playback Control                                               -->
+    <!-- ================================================================ -->
+    <div class="demo">
+      <h2>2. Playback Control</h2>
+      <p class="desc">
+        Start a long animation and control it with pause, resume, reverse, and seek.
+      </p>
+      <div class="box" id="box-playback">PLAY</div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="controls">
+        <button id="btn-start">Start</button>
+        <button id="btn-pause">Pause</button>
+        <button id="btn-resume">Resume</button>
+        <button id="btn-reverse">Reverse</button>
+        <button id="btn-seek50">Seek 50%</button>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- 3. Timeline + Stagger                                             -->
+    <!-- ================================================================ -->
+    <div class="demo">
+      <h2>3. Timeline + Stagger</h2>
+      <p class="desc">
+        Eight items staggered from center with bounce easing. Use play, reverse, or seek the
+        timeline.
+      </p>
+      <div class="items" id="stagger-items">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+        <div class="item">7</div>
+        <div class="item">8</div>
+      </div>
+      <div class="controls">
+        <button id="btn-tl-play">Play</button>
+        <button id="btn-tl-reverse">Reverse</button>
+        <button id="btn-tl-seek">Seek 50%</button>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- 4. Color Animation                                                -->
+    <!-- ================================================================ -->
+    <div class="demo">
+      <h2>4. Color Animation</h2>
+      <p class="desc">Animate backgroundColor between colours. Click the button to cycle.</p>
+      <div class="color-box" id="color-box">COLOR</div>
+      <div class="controls">
+        <button id="btn-color">Animate Color</button>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- 5. Plain Object Animation                                         -->
+    <!-- ================================================================ -->
+    <div class="demo">
+      <h2>5. Plain Object Animation</h2>
+      <p class="desc">
+        Animate a plain JS object (camera-like), rendering updated values in real-time.
+      </p>
+      <div class="object-display" id="object-display">
+        <span class="label">x:</span> <span class="value" id="cam-x">0.00</span><br />
+        <span class="label">y:</span> <span class="value" id="cam-y">0.00</span><br />
+        <span class="label">z:</span> <span class="value" id="cam-z">5.00</span><br />
+        <span class="label">fov:</span> <span class="value" id="cam-fov">45.00</span>
+      </div>
+      <canvas
+        id="cam-canvas"
+        width="400"
+        height="200"
+        style="border-radius: 8px; margin-bottom: 1rem; display: block; background: #0d1117"
+      ></canvas>
+      <div class="controls">
+        <button id="btn-cam-animate">Animate Camera</button>
+        <button id="btn-cam-reset">Reset Camera</button>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- 6. Overwrite Demo                                                 -->
+    <!-- ================================================================ -->
+    <div class="demo">
+      <h2>6. Overwrite Demo</h2>
+      <p class="desc">
+        Click rapidly! Each click creates a new tween with <code>overwrite: 'auto'</code>, killing
+        conflicting tweens so the box never fights itself.
+      </p>
+      <div class="overwrite-area" id="overwrite-area">
+        <div class="overwrite-box" id="overwrite-box">CLICK</div>
+      </div>
+      <div class="click-counter" id="click-counter">Clicks: 0</div>
+      <div class="controls">
+        <button id="btn-overwrite">Animate to random X</button>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- 7. Multiple Easings Comparison                                    -->
+    <!-- ================================================================ -->
+    <div class="demo">
+      <h2>7. Multiple Easings Comparison</h2>
+      <p class="desc">
+        Six boxes animate simultaneously with different easing functions. Watch the difference!
+      </p>
+      <div class="easing-grid" id="easing-grid">
+        <div class="easing-lane">
+          <div class="label">linear</div>
+          <div class="easing-track">
+            <div class="easing-ball" style="background: #e94560" id="ease-0"></div>
+          </div>
+        </div>
+        <div class="easing-lane">
+          <div class="label">quadOut</div>
+          <div class="easing-track">
+            <div class="easing-ball" style="background: #0f3460" id="ease-1"></div>
+          </div>
+        </div>
+        <div class="easing-lane">
+          <div class="label">cubicOut</div>
+          <div class="easing-track">
+            <div class="easing-ball" style="background: #533483" id="ease-2"></div>
+          </div>
+        </div>
+        <div class="easing-lane">
+          <div class="label">backOut</div>
+          <div class="easing-track">
+            <div class="easing-ball" style="background: #ff6348" id="ease-3"></div>
+          </div>
+        </div>
+        <div class="easing-lane">
+          <div class="label">elasticOut</div>
+          <div class="easing-track">
+            <div class="easing-ball" style="background: #2ed573" id="ease-4"></div>
+          </div>
+        </div>
+        <div class="easing-lane">
+          <div class="label">bounceOut</div>
+          <div class="easing-track">
+            <div class="easing-ball" style="background: #ffa502" id="ease-5"></div>
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="btn-easings-play">Play All</button>
+        <button id="btn-easings-reset">Reset</button>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- Script                                                            -->
+    <!-- ================================================================ -->
+    <script type="module">
+      import {
+        Tween,
+        Timeline,
+        stagger,
+        linear,
+        quadOut,
+        cubicOut,
+        backOut,
+        elasticOut,
+        bounceOut,
+      } from '../../dist/index.js';
+
+      // ================================================================
+      // 1. Basic Tween
+      // ================================================================
+      const boxBasic = document.getElementById('box-basic');
+
+      document.getElementById('btn-to').addEventListener('click', () => {
+        Tween.killTweensOf(boxBasic);
+        Tween.to(boxBasic, 1000, { x: 300, rotation: 360, ease: quadOut });
+      });
+
+      document.getElementById('btn-from').addEventListener('click', () => {
+        Tween.killTweensOf(boxBasic);
+        Tween.from(boxBasic, 1000, { x: 300, scale: 0, ease: backOut });
+      });
+
+      document.getElementById('btn-fromTo').addEventListener('click', () => {
+        Tween.killTweensOf(boxBasic);
+        Tween.fromTo(
+          boxBasic,
+          1200,
+          { x: 0, rotation: 0 },
+          { x: 300, rotation: 720, ease: elasticOut },
+        );
+      });
+
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        Tween.killTweensOf(boxBasic);
+        Tween.to(boxBasic, 400, { x: 0, rotation: 0, scale: 1, ease: quadOut });
+      });
+
+      // ================================================================
+      // 2. Playback Control
+      // ================================================================
+      const boxPlayback = document.getElementById('box-playback');
+      const progressFill = document.getElementById('progress-fill');
+      let playbackTween = null;
+
+      document.getElementById('btn-start').addEventListener('click', () => {
+        // Kill any previous tween on this box
+        if (playbackTween) playbackTween.kill();
+
+        playbackTween = Tween.to(boxPlayback, 3000, {
+          x: 500,
+          rotation: 720,
+          ease: cubicOut,
+          onUpdate: (progress) => {
+            progressFill.style.width = `${(progress * 100).toFixed(1)}%`;
+          },
+          onComplete: () => {
+            progressFill.style.width = '100%';
+          },
+        });
+      });
+
+      document.getElementById('btn-pause').addEventListener('click', () => {
+        playbackTween?.pause();
+      });
+
+      document.getElementById('btn-resume').addEventListener('click', () => {
+        playbackTween?.resume();
+      });
+
+      document.getElementById('btn-reverse').addEventListener('click', () => {
+        playbackTween?.reverse();
+      });
+
+      document.getElementById('btn-seek50').addEventListener('click', () => {
+        playbackTween?.seek(1500); // 50% of 3000ms
+        progressFill.style.width = '50%';
+      });
+
+      // ================================================================
+      // 3. Timeline + Stagger
+      // ================================================================
+      const staggerItemEls = [...document.querySelectorAll('#stagger-items .item')];
+      let staggerTimeline = null;
+
+      function buildTimeline() {
+        // Reset items to hidden state
+        staggerItemEls.forEach((el) => {
+          el.style.opacity = '0';
+          el.style.transform = '';
+        });
+
+        staggerTimeline = new Timeline({ defaults: { ease: bounceOut } });
+        staggerTimeline.staggerTo(
+          staggerItemEls,
+          700,
+          { opacity: 1, y: 0, scale: 1 },
+          stagger(120, { from: 'center' }),
+        );
+        return staggerTimeline;
+      }
+
+      document.getElementById('btn-tl-play').addEventListener('click', () => {
+        if (staggerTimeline) staggerTimeline.kill();
+        buildTimeline().play();
+      });
+
+      document.getElementById('btn-tl-reverse').addEventListener('click', () => {
+        if (staggerTimeline) {
+          staggerTimeline.reverse();
+          if (!staggerTimeline.isPlaying) staggerTimeline.play();
+        }
+      });
+
+      document.getElementById('btn-tl-seek').addEventListener('click', () => {
+        if (!staggerTimeline) buildTimeline();
+        staggerTimeline.seek(staggerTimeline.duration * 0.5);
+      });
+
+      // ================================================================
+      // 4. Color Animation
+      // ================================================================
+      const colorBox = document.getElementById('color-box');
+      const colors = ['#e94560', '#0f3460', '#533483', '#2ed573', '#ffa502', '#ff6348'];
+      let colorIndex = 0;
+
+      document.getElementById('btn-color').addEventListener('click', () => {
+        colorIndex = (colorIndex + 1) % colors.length;
+        Tween.killTweensOf(colorBox);
+        Tween.to(colorBox, 1200, {
+          backgroundColor: colors[colorIndex],
+          ease: cubicOut,
+        });
+        colorBox.textContent = colors[colorIndex];
+      });
+
+      // ================================================================
+      // 5. Plain Object Animation
+      // ================================================================
+      const camera = { x: 0, y: 0, z: 5, fov: 45 };
+      const camXEl = document.getElementById('cam-x');
+      const camYEl = document.getElementById('cam-y');
+      const camZEl = document.getElementById('cam-z');
+      const camFovEl = document.getElementById('cam-fov');
+      const canvas = document.getElementById('cam-canvas');
+      const ctx = canvas.getContext('2d');
+
+      function renderCamera() {
+        camXEl.textContent = camera.x.toFixed(2);
+        camYEl.textContent = camera.y.toFixed(2);
+        camZEl.textContent = camera.z.toFixed(2);
+        camFovEl.textContent = camera.fov.toFixed(2);
+
+        // Draw a simple perspective grid visualisation
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const cx = canvas.width / 2 + camera.x * 10;
+        const cy = canvas.height / 2 + camera.y * 10;
+        const fovScale = camera.fov / 45;
+        const depth = camera.z * 15;
+
+        ctx.strokeStyle = 'rgba(233, 69, 96, 0.3)';
+        ctx.lineWidth = 1;
+
+        // Draw converging lines
+        for (let i = -4; i <= 4; i++) {
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(cx + i * depth * fovScale, cy + depth);
+          ctx.stroke();
+        }
+
+        // Draw horizontal lines
+        for (let d = 1; d <= 5; d++) {
+          const y = cy + d * (depth / 5);
+          const spread = d * (depth / 5) * fovScale;
+          ctx.beginPath();
+          ctx.moveTo(cx - spread, y);
+          ctx.lineTo(cx + spread, y);
+          ctx.stroke();
+        }
+
+        // Camera marker
+        ctx.fillStyle = '#e94560';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Label
+        ctx.fillStyle = '#666';
+        ctx.font = '11px system-ui';
+        ctx.fillText(
+          `cam(${camera.x.toFixed(1)}, ${camera.y.toFixed(1)}, ${camera.z.toFixed(1)}) fov:${camera.fov.toFixed(0)}`,
+          10,
+          18,
+        );
+      }
+
+      renderCamera();
+
+      document.getElementById('btn-cam-animate').addEventListener('click', () => {
+        Tween.killTweensOf(camera);
+        Tween.to(camera, 2000, {
+          x: 8,
+          y: -3,
+          z: 12,
+          fov: 75,
+          ease: elasticOut,
+          onUpdate: () => renderCamera(),
+        });
+      });
+
+      document.getElementById('btn-cam-reset').addEventListener('click', () => {
+        Tween.killTweensOf(camera);
+        Tween.to(camera, 800, {
+          x: 0,
+          y: 0,
+          z: 5,
+          fov: 45,
+          ease: quadOut,
+          onUpdate: () => renderCamera(),
+        });
+      });
+
+      // ================================================================
+      // 6. Overwrite Demo
+      // ================================================================
+      const overwriteBox = document.getElementById('overwrite-box');
+      const clickCounter = document.getElementById('click-counter');
+      let clickCount = 0;
+
+      document.getElementById('btn-overwrite').addEventListener('click', () => {
+        clickCount++;
+        clickCounter.textContent = `Clicks: ${clickCount}`;
+
+        // Random target X between 0 and 500
+        const targetX = Math.random() * 500;
+
+        // overwrite:'auto' kills only tweens animating the same properties on the same target
+        Tween.to(overwriteBox, 800, {
+          x: targetX,
+          ease: backOut,
+          overwrite: 'auto',
+        });
+      });
+
+      // Also allow clicking the area itself
+      document.getElementById('overwrite-area').addEventListener('click', (e) => {
+        if (e.target === overwriteBox) return; // let the button handle it
+        clickCount++;
+        clickCounter.textContent = `Clicks: ${clickCount}`;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const targetX = Math.max(0, e.clientX - rect.left - 40);
+        Tween.to(overwriteBox, 600, {
+          x: targetX,
+          ease: backOut,
+          overwrite: 'auto',
+        });
+      });
+
+      // ================================================================
+      // 7. Multiple Easings Comparison
+      // ================================================================
+      const easings = [linear, quadOut, cubicOut, backOut, elasticOut, bounceOut];
+      const easingBalls = easings.map((_, i) => document.getElementById(`ease-${i}`));
+
+      document.getElementById('btn-easings-play').addEventListener('click', () => {
+        easingBalls.forEach((ball, i) => {
+          Tween.killTweensOf(ball);
+          // Reset to top
+          ball.style.transform = 'translateX(-50%)';
+          ball.style.top = '0px';
+
+          // Animate downwards using the 'y' transform shorthand
+          Tween.to(ball, 1500, {
+            y: 164, // track height (200) - ball size (36)
+            ease: easings[i],
+          });
+        });
+      });
+
+      document.getElementById('btn-easings-reset').addEventListener('click', () => {
+        easingBalls.forEach((ball) => {
+          Tween.killTweensOf(ball);
+          Tween.to(ball, 400, { y: 0, ease: quadOut });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turbo-Tween - Vue 3 Examples</title>
+    <style>
+      /* ------------------------------------------------------------------ */
+      /* Base / Dark Theme                                                    */
+      /* ------------------------------------------------------------------ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        padding: 2rem 2.5rem 4rem;
+        line-height: 1.5;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 0.25rem;
+        background: linear-gradient(135deg, #42b883, #0f3460);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .demo {
+        background: #16213e;
+        border: 1px solid #0f3460;
+        border-radius: 12px;
+        padding: 1.5rem 2rem;
+        margin-bottom: 1.75rem;
+      }
+
+      .demo h2 {
+        font-size: 1.1rem;
+        color: #42b883;
+        margin-bottom: 0.25rem;
+      }
+
+      .demo p.desc {
+        font-size: 0.85rem;
+        color: #888;
+        margin-bottom: 1rem;
+      }
+
+      .box {
+        width: 80px;
+        height: 80px;
+        background: #42b883;
+        border-radius: 10px;
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .box.alt {
+        background: #e94560;
+      }
+      .box.blue {
+        background: #0f3460;
+      }
+
+      .controls {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      button {
+        padding: 0.5rem 1.1rem;
+        border: 1px solid #0f3460;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-family: inherit;
+        transition:
+          background 0.2s,
+          border-color 0.2s;
+      }
+
+      button:hover {
+        background: #0f3460;
+        border-color: #42b883;
+      }
+
+      button:active {
+        transform: scale(0.97);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .badge.active {
+        background: rgba(66, 184, 131, 0.2);
+        color: #42b883;
+        border: 1px solid #42b883;
+      }
+
+      .badge.idle {
+        background: rgba(136, 136, 136, 0.15);
+        color: #888;
+        border: 1px solid #555;
+      }
+
+      .timeline-items {
+        display: flex;
+        gap: 0.6rem;
+        margin: 1rem 0;
+      }
+
+      .tl-item {
+        width: 60px;
+        height: 60px;
+        background: #533483;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .progress-track {
+        width: 100%;
+        height: 6px;
+        background: #1a1a2e;
+        border-radius: 3px;
+        margin: 0.75rem 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #42b883, #0f3460);
+        border-radius: 3px;
+      }
+
+      input[type='range'] {
+        width: 180px;
+        accent-color: #42b883;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Turbo-Tween + Vue 3</h1>
+    <p class="subtitle">
+      Composition API demos using useTween, TweenTo, TweenFrom, and TweenTimeline
+    </p>
+
+    <div id="app"></div>
+
+    <!-- Vue template stored in a script tag for cleanliness -->
+    <script type="text/html" id="app-template">
+      <!-- ============================================================ -->
+      <!-- 1. useTween Composable                                        -->
+      <!-- ============================================================ -->
+      <div class="demo">
+        <h2>1. useTween Composable</h2>
+        <p class="desc">
+          Imperative animation with reactive <code>isAnimating</code> state. The tween engine is
+          scoped to the component and auto-cleans on unmount.
+        </p>
+        <div class="box" ref="hookBox">HOOK</div>
+        <div class="controls">
+          <button @click="animateHookBox">Animate</button>
+          <button @click="resetHookBox">Reset</button>
+          <span :class="['badge', hookAnimating ? 'active' : 'idle']">
+            {{ hookAnimating ? 'Animating' : 'Idle' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 2. TweenTo Component                                          -->
+      <!-- ============================================================ -->
+      <div class="demo">
+        <h2>2. TweenTo Component</h2>
+        <p class="desc">
+          Declarative <code>&lt;TweenTo&gt;</code> animates its child on mount. Click "Remount" to
+          re-trigger by toggling the key.
+        </p>
+        <tween-to
+          :key="tweenToKey"
+          :duration="1000"
+          :to="{ x: 250, rotation: 360 }"
+          :ease="quadOut"
+        >
+          <div class="box alt">TO</div>
+        </tween-to>
+        <div class="controls" style="margin-top: 0.5rem;">
+          <button @click="remountTo">Remount</button>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 3. TweenFrom Component                                        -->
+      <!-- ============================================================ -->
+      <div class="demo">
+        <h2>3. TweenFrom Component</h2>
+        <p class="desc">
+          Declarative <code>&lt;TweenFrom&gt;</code> for entrance animations. The child enters from
+          the specified starting values.
+        </p>
+        <tween-from
+          :key="tweenFromKey"
+          :duration="800"
+          :from="{ x: -200, scale: 0, rotation: -180 }"
+          :ease="backOut"
+        >
+          <div class="box blue">FROM</div>
+        </tween-from>
+        <div class="controls" style="margin-top: 0.5rem;">
+          <button @click="remountFrom">Remount</button>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 4. TweenTimeline Component                                    -->
+      <!-- ============================================================ -->
+      <div class="demo">
+        <h2>4. TweenTimeline Component</h2>
+        <p class="desc">
+          Declarative timeline that sequences children. Use the ref to control playback.
+        </p>
+        <tween-timeline
+          ref="timeline"
+          :key="timelineKey"
+          :auto-play="false"
+          :defaults="{ ease: bounceOut }"
+          @complete="onTimelineComplete"
+        >
+          <tween-to :duration="600" :to="{ x: 100, opacity: 1 }">
+            <div class="tl-item" style="opacity: 0;">A</div>
+          </tween-to>
+          <tween-to :duration="600" :to="{ x: 100, opacity: 1 }">
+            <div class="tl-item" style="opacity: 0;">B</div>
+          </tween-to>
+          <tween-from :duration="600" :from="{ scale: 0, rotation: 360 }">
+            <div class="tl-item">C</div>
+          </tween-from>
+          <tween-to :duration="600" :to="{ x: 100, opacity: 1 }">
+            <div class="tl-item" style="opacity: 0;">D</div>
+          </tween-to>
+        </tween-timeline>
+        <div class="controls" style="margin-top: 1rem;">
+          <button @click="tlPlay">Play</button>
+          <button @click="tlPause">Pause</button>
+          <button @click="tlResume">Resume</button>
+          <button @click="tlReverse">Reverse</button>
+          <button @click="tlSeek50">Seek 50%</button>
+          <button @click="remountTimeline">Rebuild</button>
+          <span :class="['badge', timelineComplete ? 'idle' : 'active']">
+            {{ timelineComplete ? 'Complete' : 'Ready' }}
+          </span>
+        </div>
+      </div>
+    </script>
+
+    <!-- Load Vue 3 from CDN -->
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
+        }
+      }
+    </script>
+
+    <script type="module">
+      // ------------------------------------------------------------------
+      // Imports
+      // ------------------------------------------------------------------
+      import { createApp, ref, onMounted, defineComponent } from 'vue';
+
+      import { Tween, quadOut, backOut, bounceOut, elasticOut } from '../../dist/index.js';
+
+      import { useTween, TweenTo, TweenFrom, TweenTimeline } from '../../dist/vue/index.js';
+
+      // ------------------------------------------------------------------
+      // App
+      // ------------------------------------------------------------------
+      const App = defineComponent({
+        template: document.getElementById('app-template').innerHTML,
+
+        components: {
+          'tween-to': TweenTo,
+          'tween-from': TweenFrom,
+          'tween-timeline': TweenTimeline,
+        },
+
+        setup() {
+          // ----------------------------------------------------------
+          // 1. useTween composable
+          // ----------------------------------------------------------
+          const { to, from, killTweensOf, isAnimating: hookAnimating } = useTween();
+          const hookBox = ref(null);
+
+          function animateHookBox() {
+            if (!hookBox.value) return;
+            killTweensOf(hookBox.value);
+            to(hookBox.value, 1200, {
+              x: 300,
+              rotation: 360,
+              ease: elasticOut,
+            });
+          }
+
+          function resetHookBox() {
+            if (!hookBox.value) return;
+            killTweensOf(hookBox.value);
+            to(hookBox.value, 400, { x: 0, rotation: 0, scale: 1, ease: quadOut });
+          }
+
+          // ----------------------------------------------------------
+          // 2. TweenTo - remount via key change
+          // ----------------------------------------------------------
+          const tweenToKey = ref(0);
+          function remountTo() {
+            tweenToKey.value++;
+          }
+
+          // ----------------------------------------------------------
+          // 3. TweenFrom - remount via key change
+          // ----------------------------------------------------------
+          const tweenFromKey = ref(0);
+          function remountFrom() {
+            tweenFromKey.value++;
+          }
+
+          // ----------------------------------------------------------
+          // 4. TweenTimeline
+          // ----------------------------------------------------------
+          const timeline = ref(null);
+          const timelineKey = ref(0);
+          const timelineComplete = ref(false);
+
+          function tlPlay() {
+            timelineComplete.value = false;
+            timeline.value?.play();
+          }
+          function tlPause() {
+            timeline.value?.pause();
+          }
+          function tlResume() {
+            timeline.value?.resume();
+          }
+          function tlReverse() {
+            timeline.value?.reverse();
+            if (!timeline.value?.getTimeline()?.isPlaying) {
+              timeline.value?.play();
+            }
+          }
+          function tlSeek50() {
+            const tl = timeline.value?.getTimeline();
+            if (tl) tl.seek(tl.duration * 0.5);
+          }
+          function remountTimeline() {
+            timelineKey.value++;
+            timelineComplete.value = false;
+          }
+          function onTimelineComplete() {
+            timelineComplete.value = true;
+          }
+
+          return {
+            // 1
+            hookBox,
+            hookAnimating,
+            animateHookBox,
+            resetHookBox,
+            // 2
+            tweenToKey,
+            remountTo,
+            quadOut,
+            // 3
+            tweenFromKey,
+            remountFrom,
+            backOut,
+            // 4
+            timeline,
+            timelineKey,
+            timelineComplete,
+            bounceOut,
+            tlPlay,
+            tlPause,
+            tlResume,
+            tlReverse,
+            tlSeek50,
+            remountTimeline,
+            onTimelineComplete,
+          };
+        },
+      });
+
+      createApp(App).mount('#app');
+    </script>
+  </body>
+</html>

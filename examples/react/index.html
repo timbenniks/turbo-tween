@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turbo-Tween - React 19 Examples</title>
+    <style>
+      /* ------------------------------------------------------------------ */
+      /* Base / Dark Theme                                                    */
+      /* ------------------------------------------------------------------ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        padding: 2rem 2.5rem 4rem;
+        line-height: 1.5;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 0.25rem;
+        background: linear-gradient(135deg, #61dafb, #0f3460);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .demo {
+        background: #16213e;
+        border: 1px solid #0f3460;
+        border-radius: 12px;
+        padding: 1.5rem 2rem;
+        margin-bottom: 1.75rem;
+      }
+
+      .demo h2 {
+        font-size: 1.1rem;
+        color: #61dafb;
+        margin-bottom: 0.25rem;
+      }
+
+      .demo p.desc {
+        font-size: 0.85rem;
+        color: #888;
+        margin-bottom: 1rem;
+      }
+
+      .box {
+        width: 80px;
+        height: 80px;
+        background: #61dafb;
+        border-radius: 10px;
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #1a1a2e;
+      }
+
+      .box.alt {
+        background: #e94560;
+        color: #fff;
+      }
+      .box.purple {
+        background: #533483;
+        color: #fff;
+      }
+
+      .controls {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      button {
+        padding: 0.5rem 1.1rem;
+        border: 1px solid #0f3460;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-family: inherit;
+        transition:
+          background 0.2s,
+          border-color 0.2s;
+      }
+
+      button:hover {
+        background: #0f3460;
+        border-color: #61dafb;
+      }
+
+      button:active {
+        transform: scale(0.97);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .badge.active {
+        background: rgba(97, 218, 251, 0.2);
+        color: #61dafb;
+        border: 1px solid #61dafb;
+      }
+
+      .badge.idle {
+        background: rgba(136, 136, 136, 0.15);
+        color: #888;
+        border: 1px solid #555;
+      }
+
+      .tl-item {
+        width: 60px;
+        height: 60px;
+        background: #533483;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        margin-right: 0.6rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Turbo-Tween + React 19</h1>
+    <p class="subtitle">
+      Hook and component demos using useTween, TweenTo, TweenFrom, and TweenTimeline
+    </p>
+
+    <div id="root"></div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://unpkg.com/react@19/umd/react.production.min.js",
+          "react-dom": "https://unpkg.com/react-dom@19/umd/react-dom.production.min.js"
+        }
+      }
+    </script>
+
+    <!-- Load React UMD (no import-map ESM available for React 19 easily) -->
+    <script crossorigin src="https://unpkg.com/react@19/umd/react.production.min.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@19/umd/react-dom.production.min.js"
+    ></script>
+
+    <script type="module">
+      // ------------------------------------------------------------------
+      // Aliases for React globals (loaded via UMD above)
+      // ------------------------------------------------------------------
+      const { createElement: h, useState, useRef, useEffect, useCallback, Fragment } = React;
+
+      // ------------------------------------------------------------------
+      // Turbo-Tween imports
+      // ------------------------------------------------------------------
+      import { Tween, quadOut, backOut, bounceOut, elasticOut } from '../../dist/index.js';
+
+      import { useTween, TweenTo, TweenFrom, TweenTimeline } from '../../dist/react/index.js';
+
+      // ------------------------------------------------------------------
+      // Helper: Badge component
+      // ------------------------------------------------------------------
+      function Badge({ active, label }) {
+        return h(
+          'span',
+          {
+            className: `badge ${active ? 'active' : 'idle'}`,
+          },
+          label,
+        );
+      }
+
+      // ==================================================================
+      // 1. useTween Hook Demo
+      // ==================================================================
+      function UseTweenDemo() {
+        const boxRef = useRef(null);
+        const { to, killTweensOf, isAnimating } = useTween();
+
+        const animate = useCallback(() => {
+          if (!boxRef.current) return;
+          killTweensOf(boxRef.current);
+          to(boxRef.current, 1200, {
+            x: 300,
+            rotation: 360,
+            ease: elasticOut,
+          });
+        }, [to, killTweensOf]);
+
+        const reset = useCallback(() => {
+          if (!boxRef.current) return;
+          killTweensOf(boxRef.current);
+          to(boxRef.current, 400, { x: 0, rotation: 0, scale: 1, ease: quadOut });
+        }, [to, killTweensOf]);
+
+        return h(
+          'div',
+          { className: 'demo' },
+          h('h2', null, '1. useTween Hook'),
+          h(
+            'p',
+            { className: 'desc' },
+            'Imperative animation with reactive isAnimating state. The tween engine auto-cleans on unmount.',
+          ),
+          h('div', { ref: boxRef, className: 'box' }, 'HOOK'),
+          h(
+            'div',
+            { className: 'controls' },
+            h('button', { onClick: animate }, 'Animate'),
+            h('button', { onClick: reset }, 'Reset'),
+            h(Badge, { active: isAnimating, label: isAnimating ? 'Animating' : 'Idle' }),
+          ),
+        );
+      }
+
+      // ==================================================================
+      // 2. TweenTo Component Demo
+      // ==================================================================
+      function TweenToDemo() {
+        const [key, setKey] = useState(0);
+
+        return h(
+          'div',
+          { className: 'demo' },
+          h('h2', null, '2. TweenTo Component'),
+          h(
+            'p',
+            { className: 'desc' },
+            'Declarative animation on mount. Click "Remount" to re-trigger by changing the key.',
+          ),
+          h(
+            TweenTo,
+            {
+              key,
+              duration: 1000,
+              to: { x: 250, rotation: 360 },
+              ease: quadOut,
+            },
+            h('div', { className: 'box alt' }, 'TO'),
+          ),
+          h(
+            'div',
+            { className: 'controls', style: { marginTop: '0.5rem' } },
+            h('button', { onClick: () => setKey((k) => k + 1) }, 'Remount'),
+          ),
+        );
+      }
+
+      // ==================================================================
+      // 3. TweenFrom Component Demo
+      // ==================================================================
+      function TweenFromDemo() {
+        const [key, setKey] = useState(0);
+
+        return h(
+          'div',
+          { className: 'demo' },
+          h('h2', null, '3. TweenFrom Component'),
+          h(
+            'p',
+            { className: 'desc' },
+            'Entrance animation from specified starting values. The element animates from the "from" state to its natural position.',
+          ),
+          h(
+            TweenFrom,
+            {
+              key,
+              duration: 800,
+              from: { x: -200, scale: 0, rotation: -180 },
+              ease: backOut,
+            },
+            h('div', { className: 'box purple' }, 'FROM'),
+          ),
+          h(
+            'div',
+            { className: 'controls', style: { marginTop: '0.5rem' } },
+            h('button', { onClick: () => setKey((k) => k + 1) }, 'Remount'),
+          ),
+        );
+      }
+
+      // ==================================================================
+      // 4. TweenTimeline Component Demo
+      // ==================================================================
+      function TweenTimelineDemo() {
+        const timelineRef = useRef(null);
+        const [key, setKey] = useState(0);
+        const [complete, setComplete] = useState(false);
+
+        const play = useCallback(() => {
+          setComplete(false);
+          timelineRef.current?.play();
+        }, []);
+
+        const pause = useCallback(() => {
+          timelineRef.current?.pause();
+        }, []);
+
+        const resume = useCallback(() => {
+          timelineRef.current?.resume();
+        }, []);
+
+        const reverse = useCallback(() => {
+          timelineRef.current?.reverse();
+          const tl = timelineRef.current?.getTimeline();
+          if (tl && !tl.isPlaying) {
+            timelineRef.current?.play();
+          }
+        }, []);
+
+        const seek50 = useCallback(() => {
+          const tl = timelineRef.current?.getTimeline();
+          if (tl) tl.seek(tl.duration * 0.5);
+        }, []);
+
+        const rebuild = useCallback(() => {
+          setKey((k) => k + 1);
+          setComplete(false);
+        }, []);
+
+        const onComplete = useCallback(() => {
+          setComplete(true);
+        }, []);
+
+        return h(
+          'div',
+          { className: 'demo' },
+          h('h2', null, '4. TweenTimeline Component'),
+          h(
+            'p',
+            { className: 'desc' },
+            'Declarative timeline that sequences children. Use the ref handle to control playback.',
+          ),
+
+          // The timeline with sequenced children
+          h(
+            TweenTimeline,
+            {
+              key,
+              ref: timelineRef,
+              autoPlay: false,
+              defaults: { ease: bounceOut },
+              onComplete,
+            },
+            h(
+              TweenTo,
+              { duration: 600, to: { x: 100, opacity: 1 } },
+              h('div', { className: 'tl-item', style: { opacity: 0 } }, 'A'),
+            ),
+            h(
+              TweenTo,
+              { duration: 600, to: { x: 100, opacity: 1 } },
+              h('div', { className: 'tl-item', style: { opacity: 0 } }, 'B'),
+            ),
+            h(
+              TweenFrom,
+              { duration: 600, from: { scale: 0, rotation: 360 } },
+              h('div', { className: 'tl-item' }, 'C'),
+            ),
+            h(
+              TweenTo,
+              { duration: 600, to: { x: 100, opacity: 1 } },
+              h('div', { className: 'tl-item', style: { opacity: 0 } }, 'D'),
+            ),
+          ),
+
+          h(
+            'div',
+            { className: 'controls' },
+            h('button', { onClick: play }, 'Play'),
+            h('button', { onClick: pause }, 'Pause'),
+            h('button', { onClick: resume }, 'Resume'),
+            h('button', { onClick: reverse }, 'Reverse'),
+            h('button', { onClick: seek50 }, 'Seek 50%'),
+            h('button', { onClick: rebuild }, 'Rebuild'),
+            h(Badge, {
+              active: !complete,
+              label: complete ? 'Complete' : 'Ready',
+            }),
+          ),
+        );
+      }
+
+      // ==================================================================
+      // Root App
+      // ==================================================================
+      function App() {
+        return h(
+          Fragment,
+          null,
+          h(UseTweenDemo),
+          h(TweenToDemo),
+          h(TweenFromDemo),
+          h(TweenTimelineDemo),
+        );
+      }
+
+      // ------------------------------------------------------------------
+      // Mount
+      // ------------------------------------------------------------------
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(h(App));
+    </script>
+  </body>
+</html>
