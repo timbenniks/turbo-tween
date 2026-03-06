@@ -964,7 +964,7 @@ Orchestrates child `<TweenTo>`, `<TweenFrom>`, and `<TweenFromTo>` components in
 | ------------ | ---------------------------------------------- | ----------- | ------------------------------------------ |
 | `autoPlay`   | `boolean`                                      | `true`      | Whether to start playback on mount.        |
 | `defaults`   | `{ duration?: number; ease?: EasingFunction }` | `undefined` | Default duration and easing for children.  |
-| `onComplete` | `() => void`                                   | `undefined` | Called when the timeline finishes playing. |
+| `onComplete` | `() => void`                                   | `undefined` | Called when the timeline finishes playing (only fires if `autoPlay` is `true` or `play()` was called). |
 | `children`   | `ReactNode`                                    | --          | Child tween components.                    |
 
 **`TweenTimelineHandle` (ref interface):**
