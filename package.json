@@ -1,5 +1,5 @@
 {
-  "name": "turbo-tween",
+  "name": "@timbenniks/turbo-tween",
   "version": "0.0.1",
   "description": "GSAP ergonomics in ~5KB. Turbo Tween is a lightweight, type-safe tweening library for modern web apps",
   "type": "module",

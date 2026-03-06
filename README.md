@@ -18,11 +18,11 @@
 ## Install
 
 ```bash
-npm install turbo-tween
+npm install @timbenniks/turbo-tween
 # or
-pnpm add turbo-tween
+pnpm add @timbenniks/turbo-tween
 # or
-yarn add turbo-tween
+yarn add @timbenniks/turbo-tween
 ```
 
 ## Quick Start
@@ -30,7 +30,7 @@ yarn add turbo-tween
 ### Vanilla
 
 ```ts
-import { Tween, quadOut } from 'turbo-tween';
+import { Tween, quadOut } from '@timbenniks/turbo-tween';
 
 const el = document.querySelector('.box');
 
@@ -50,8 +50,8 @@ Tween.fromTo(el, 800, { scale: 0 }, { scale: 1, ease: bounceOut });
 
 ```vue
 <script setup>
-import { TweenTo, TweenTimeline } from 'turbo-tween/vue';
-import { quadOut } from 'turbo-tween';
+import { TweenTo, TweenTimeline } from '@timbenniks/turbo-tween/vue';
+import { quadOut } from '@timbenniks/turbo-tween';
 </script>
 
 <template>
@@ -77,8 +77,8 @@ import { quadOut } from 'turbo-tween';
 ```vue
 <script setup>
 import { ref } from 'vue';
-import { useTween } from 'turbo-tween/vue';
-import { quadOut } from 'turbo-tween';
+import { useTween } from '@timbenniks/turbo-tween/vue';
+import { quadOut } from '@timbenniks/turbo-tween';
 
 const box = ref<HTMLElement>();
 const { to, isAnimating } = useTween();
@@ -99,8 +99,8 @@ function animate() {
 **Declarative (components):**
 
 ```tsx
-import { TweenTo, TweenTimeline, TweenFrom } from 'turbo-tween/react';
-import { quadOut } from 'turbo-tween';
+import { TweenTo, TweenTimeline, TweenFrom } from '@timbenniks/turbo-tween/react';
+import { quadOut } from '@timbenniks/turbo-tween';
 
 function App() {
   return (
@@ -128,8 +128,8 @@ function App() {
 
 ```tsx
 import { useRef, useEffect } from 'react';
-import { useTween } from 'turbo-tween/react';
-import { quadOut } from 'turbo-tween';
+import { useTween } from '@timbenniks/turbo-tween/react';
+import { quadOut } from '@timbenniks/turbo-tween';
 
 function AnimatedBox() {
   const ref = useRef<HTMLDivElement>(null);
@@ -203,7 +203,7 @@ await tween; // resolves on completion
 Sequence multiple tweens with controlled timing:
 
 ```ts
-import { Timeline, stagger, quadOut } from 'turbo-tween';
+import { Timeline, stagger, quadOut } from '@timbenniks/turbo-tween';
 
 const tl = new Timeline({ defaults: { ease: quadOut } });
 
@@ -315,7 +315,7 @@ These shorthands map to CSS `transform` and are composed in this order:
 All 30 easing functions are tree-shakeable named exports:
 
 ```ts
-import { quadOut, elasticOut, bounceInOut } from 'turbo-tween';
+import { quadOut, elasticOut, bounceInOut } from '@timbenniks/turbo-tween';
 ```
 
 | Family  | In          | Out          | InOut          |
@@ -365,7 +365,7 @@ Measured with [size-limit](https://github.com/ai/size-limit) (minified + brotli)
 
 | Entry                | Size    |
 | -------------------- | ------- |
-| Core (`turbo-tween`) | ~4.5 KB |
+| Core (`@timbenniks/turbo-tween`) | ~4.5 KB |
 | Core + timeline      | ~9 KB   |
 
 The Vue and React adapters add minimal overhead (~1 KB each) and re-use the core.

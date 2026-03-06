@@ -54,22 +54,22 @@ GSAP has no official Vue or React integration. You wire up lifecycle cleanup you
 
 ```diff
 - npm install gsap
-+ npm install turbo-tween
++ npm install @timbenniks/turbo-tween
 ```
 
 Imports change accordingly:
 
 ```diff
 - import gsap from 'gsap';
-+ import { Tween, quadOut } from 'turbo-tween';
++ import { Tween, quadOut } from '@timbenniks/turbo-tween';
 ```
 
 For framework adapters:
 
 ```diff
 - import gsap from 'gsap';
-+ import { useTween } from 'turbo-tween/vue';   // Vue
-+ import { useTween } from 'turbo-tween/react'; // React
++ import { useTween } from '@timbenniks/turbo-tween/vue';   // Vue
++ import { useTween } from '@timbenniks/turbo-tween/react'; // React
 ```
 
 ---
@@ -84,7 +84,7 @@ For framework adapters:
 - import gsap from 'gsap';
 - gsap.to('.box', { x: 100, duration: 1, ease: 'power2.out' });
 
-+ import { Tween, cubicOut } from 'turbo-tween';
++ import { Tween, cubicOut } from '@timbenniks/turbo-tween';
 + Tween.to(element, 1000, { x: 100, ease: cubicOut });
 ```
 
@@ -102,7 +102,7 @@ For framework adapters:
 -   onComplete: () => console.log('done'),
 - });
 
-+ import { Tween, backOut } from 'turbo-tween';
++ import { Tween, backOut } from '@timbenniks/turbo-tween';
 + Tween.to(element, 1500, {
 +   x: 200,
 +   opacity: 0.5,
@@ -134,7 +134,7 @@ For framework adapters:
 -   ease: 'power1.out',
 - });
 
-+ import { Tween, quadOut } from 'turbo-tween';
++ import { Tween, quadOut } from '@timbenniks/turbo-tween';
 + Tween.from(element, 500, {
 +   opacity: 0,
 +   y: -50,
@@ -152,7 +152,7 @@ For framework adapters:
 -   { x: 100, opacity: 1, duration: 0.8, ease: 'expo.out' }
 - );
 
-+ import { Tween, expoOut } from 'turbo-tween';
++ import { Tween, expoOut } from '@timbenniks/turbo-tween';
 + Tween.fromTo(element, 800,
 +   { x: -100, opacity: 0 },
 +   { x: 100, opacity: 1, ease: expoOut }
@@ -226,7 +226,7 @@ GSAP requires the paid `CustomEase` plugin to create custom curves. In Turbo-Twe
 - CustomEase.create('myEase', 'M0,0 C0.25,0.1 0.25,1 1,1');
 - gsap.to(el, { x: 100, ease: 'myEase' });
 
-+ import { Tween } from 'turbo-tween';
++ import { Tween } from '@timbenniks/turbo-tween';
 + const myEase = (t: number) => t * t * (3 - 2 * t); // smoothstep
 + Tween.to(el, 1000, { x: 100, ease: myEase });
 ```
@@ -234,7 +234,7 @@ GSAP requires the paid `CustomEase` plugin to create custom curves. In Turbo-Twe
 You can also compose easings:
 
 ```ts
-import { Tween, cubicOut } from 'turbo-tween';
+import { Tween, cubicOut } from '@timbenniks/turbo-tween';
 
 // Overshoot easing: cubic out + 10% overshoot
 const overshoot = (t: number) => cubicOut(t) * 1.1 - 0.1 * cubicOut(t) * cubicOut(t);
@@ -348,7 +348,7 @@ tween.currentTime; // number (ms elapsed)
 -   .to('.box', { y: 200, duration: 0.5 })
 -   .from('.other', { opacity: 0, duration: 0.3 });
 
-+ import { Timeline, cubicOut } from 'turbo-tween';
++ import { Timeline, cubicOut } from '@timbenniks/turbo-tween';
 +
 + const tl = new Timeline({ defaults: { ease: cubicOut } });
 + tl.to(box, 500, { x: 100 })
@@ -433,7 +433,7 @@ GSAP handles stagger inline inside `.to()` options. Turbo-Tween uses a separate 
 -   stagger: 0.1,
 - });
 
-+ import { Timeline, stagger } from 'turbo-tween';
++ import { Timeline, stagger } from '@timbenniks/turbo-tween';
 + const tl = new Timeline();
 + tl.staggerTo(elements, 500, { x: 100 }, stagger(100));
 + tl.play();
@@ -482,7 +482,7 @@ GSAP handles stagger inline inside `.to()` options. Turbo-Tween uses a separate 
 -   stagger: { each: 0.1, from: 'center', ease: 'power2.out' },
 - });
 
-+ import { Timeline, stagger, cubicOut } from 'turbo-tween';
++ import { Timeline, stagger, cubicOut } from '@timbenniks/turbo-tween';
 + const tl = new Timeline();
 + tl.staggerTo(elements, 500, { x: 100 }, stagger(100, {
 +   from: 'center',
@@ -582,8 +582,8 @@ Both GSAP and Turbo-Tween tweens are thenable. You can `await` them directly.
 
 + // Turbo-Tween -- auto-cleanup via composable
 + import { ref, onMounted } from 'vue';
-+ import { useTween } from 'turbo-tween/vue';
-+ import { quadOut } from 'turbo-tween';
++ import { useTween } from '@timbenniks/turbo-tween/vue';
++ import { quadOut } from '@timbenniks/turbo-tween';
 +
 + const box = ref<HTMLElement>();
 + const { to } = useTween(); // auto-kills all tweens on unmount
@@ -613,8 +613,8 @@ Both GSAP and Turbo-Tween tweens are thenable. You can `await` them directly.
 
 + // Turbo-Tween -- auto-cleanup via hook
 + import { useRef, useEffect } from 'react';
-+ import { useTween } from 'turbo-tween/react';
-+ import { quadOut } from 'turbo-tween';
++ import { useTween } from '@timbenniks/turbo-tween/react';
++ import { quadOut } from '@timbenniks/turbo-tween';
 +
 + function Component() {
 +   const box = useRef<HTMLDivElement>(null);
@@ -743,8 +743,8 @@ onUnmounted(() => {
 ```vue
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useTween } from 'turbo-tween/vue';
-import { cubicOut } from 'turbo-tween';
+import { useTween } from '@timbenniks/turbo-tween/vue';
+import { cubicOut } from '@timbenniks/turbo-tween';
 
 const box = ref<HTMLElement>();
 const { to, isAnimating } = useTween(); // auto-cleanup on unmount
@@ -770,8 +770,8 @@ The `useTween()` composable returns `to`, `from`, `fromTo`, `killAll`, `killTwee
 
 ```vue
 <script setup>
-import { TweenTo, TweenFrom, TweenTimeline } from 'turbo-tween/vue';
-import { cubicOut } from 'turbo-tween';
+import { TweenTo, TweenFrom, TweenTimeline } from '@timbenniks/turbo-tween/vue';
+import { cubicOut } from '@timbenniks/turbo-tween';
 </script>
 
 <template>
@@ -797,7 +797,7 @@ Timeline components expose playback control via `ref`:
 ```vue
 <script setup>
 import { ref } from 'vue';
-import { TweenTimeline, TweenTo } from 'turbo-tween/vue';
+import { TweenTimeline, TweenTo } from '@timbenniks/turbo-tween/vue';
 
 const timeline = ref();
 
@@ -846,8 +846,8 @@ function Component() {
 
 ```tsx
 import { useRef, useEffect } from 'react';
-import { useTween } from 'turbo-tween/react';
-import { cubicOut } from 'turbo-tween';
+import { useTween } from '@timbenniks/turbo-tween/react';
+import { cubicOut } from '@timbenniks/turbo-tween';
 
 function Component() {
   const box = useRef<HTMLDivElement>(null);
@@ -878,9 +878,9 @@ The `useTween()` hook returns `to`, `from`, `fromTo`, `killAll`, `killTweensOf`,
 
 ```tsx
 import { useRef } from 'react';
-import { TweenTo, TweenTimeline } from 'turbo-tween/react';
-import type { TweenTimelineHandle } from 'turbo-tween/react';
-import { cubicOut } from 'turbo-tween';
+import { TweenTo, TweenTimeline } from '@timbenniks/turbo-tween/react';
+import type { TweenTimelineHandle } from '@timbenniks/turbo-tween/react';
+import { cubicOut } from '@timbenniks/turbo-tween';
 
 function Component() {
   const tlRef = useRef<TweenTimelineHandle>(null);
@@ -944,7 +944,7 @@ If your project relies heavily on any of these features, Turbo-Tween may not be 
 
 Use this checklist when migrating a project from GSAP to Turbo-Tween:
 
-- [ ] **Replace imports** -- Change `import gsap from 'gsap'` to `import { Tween } from 'turbo-tween'` and import specific easings
+- [ ] **Replace imports** -- Change `import gsap from 'gsap'` to `import { Tween } from '@timbenniks/turbo-tween'` and import specific easings
 - [ ] **Convert durations** -- Multiply all duration values by 1000 (seconds to milliseconds) and move from the options object to the 2nd argument
 - [ ] **Convert delays** -- Multiply all delay values by 1000 (seconds to milliseconds)
 - [ ] **Replace easing strings** -- Change string easings like `'power2.out'` to imported functions like `cubicOut`

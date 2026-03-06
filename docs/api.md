@@ -9,7 +9,7 @@ Complete reference for every function, type, option, and adapter in Turbo-Tween.
 The `Tween` object is the primary entry point. It is a singleton backed by a default `TweenEngine` and a shared `requestAnimationFrame` clock. All methods return a `TweenInstance` with full playback control and `await` support.
 
 ```ts
-import { Tween, quadOut } from 'turbo-tween';
+import { Tween, quadOut } from '@timbenniks/turbo-tween';
 ```
 
 ---
@@ -301,7 +301,7 @@ el.addEventListener('mouseleave', () => tween.resume());
 `Timeline` sequences multiple tweens into a coordinated animation with shared playback control. Each tween added to the timeline starts where the previous one ended (the **cursor model**).
 
 ```ts
-import { Timeline, quadOut, stagger } from 'turbo-tween';
+import { Timeline, quadOut, stagger } from '@timbenniks/turbo-tween';
 ```
 
 ### Constructor
@@ -372,7 +372,7 @@ Timeline cursor:  0ms      500ms     1000ms    1500ms
 ### Detailed example: multi-step intro animation
 
 ```ts
-import { Timeline, cubicOut, backOut, stagger } from 'turbo-tween';
+import { Timeline, cubicOut, backOut, stagger } from '@timbenniks/turbo-tween';
 
 const heading = document.querySelector('h1')!;
 const paragraph = document.querySelector('p')!;
@@ -495,7 +495,7 @@ For advanced use cases you can create an isolated engine instance. Each engine m
 ### Constructor
 
 ```ts
-import { TweenEngine } from 'turbo-tween';
+import { TweenEngine } from '@timbenniks/turbo-tween';
 
 const engine = new TweenEngine(clock?: Clock);
 ```
@@ -521,7 +521,7 @@ If no `Clock` is provided, the engine uses the default RAF-based clock shared by
 ### Example
 
 ```ts
-import { TweenEngine } from 'turbo-tween';
+import { TweenEngine } from '@timbenniks/turbo-tween';
 
 const engine = new TweenEngine();
 
@@ -539,8 +539,8 @@ console.log(engine.activeCount); // 0
 All easing functions follow the normalized signature `(t: number) => number`, where `t` ranges from 0 to 1 (representing progress from start to end). The return value is typically 0 to 1, but some families overshoot.
 
 ```ts
-import { quadOut, backIn, elasticOut } from 'turbo-tween';
-import type { EasingFunction } from 'turbo-tween';
+import { quadOut, backIn, elasticOut } from '@timbenniks/turbo-tween';
+import type { EasingFunction } from '@timbenniks/turbo-tween';
 ```
 
 ### Full list
@@ -577,7 +577,7 @@ This matters if you are using eased values directly (e.g., clamping a color chan
 Any function matching `(t: number) => number` works as an easing:
 
 ```ts
-import type { EasingFunction } from 'turbo-tween';
+import type { EasingFunction } from '@timbenniks/turbo-tween';
 
 // Cubic ease-out (manual implementation)
 const myCubicOut: EasingFunction = (t) => 1 - Math.pow(1 - t, 3);
@@ -609,10 +609,10 @@ Tween.to(el, 1000, { x: 200, ease: myCubicOut });
 
 ---
 
-## Vue Adapter (`turbo-tween/vue`)
+## Vue Adapter (`@timbenniks/turbo-tween/vue`)
 
 ```ts
-import { useTween, TweenTo, TweenFrom, TweenFromTo, TweenTimeline } from 'turbo-tween/vue';
+import { useTween, TweenTo, TweenFrom, TweenFromTo, TweenTimeline } from '@timbenniks/turbo-tween/vue';
 ```
 
 ---
@@ -637,8 +637,8 @@ Creates a scoped `TweenEngine` tied to the component lifecycle. When the compone
 ```vue
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useTween } from 'turbo-tween/vue';
-import { cubicOut } from 'turbo-tween';
+import { useTween } from '@timbenniks/turbo-tween/vue';
+import { cubicOut } from '@timbenniks/turbo-tween';
 
 const boxRef = ref<HTMLElement | null>(null);
 const { to, isAnimating } = useTween();
@@ -783,8 +783,8 @@ Access these via a template ref on the component:
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { TweenTimeline, TweenFrom, TweenTo } from 'turbo-tween/vue';
-import { cubicOut, backOut } from 'turbo-tween';
+import { TweenTimeline, TweenFrom, TweenTo } from '@timbenniks/turbo-tween/vue';
+import { cubicOut, backOut } from '@timbenniks/turbo-tween';
 
 const tlRef = ref<InstanceType<typeof TweenTimeline> | null>(null);
 
@@ -822,11 +822,11 @@ function replay() {
 
 ---
 
-## React Adapter (`turbo-tween/react`)
+## React Adapter (`@timbenniks/turbo-tween/react`)
 
 ```tsx
-import { useTween, TweenTo, TweenFrom, TweenFromTo, TweenTimeline } from 'turbo-tween/react';
-import type { TweenTimelineHandle } from 'turbo-tween/react';
+import { useTween, TweenTo, TweenFrom, TweenFromTo, TweenTimeline } from '@timbenniks/turbo-tween/react';
+import type { TweenTimelineHandle } from '@timbenniks/turbo-tween/react';
 ```
 
 ---
@@ -852,8 +852,8 @@ Creates a scoped `TweenEngine` that auto-cleans all tweens on unmount. The engin
 
 ```tsx
 import { useRef, useEffect } from 'react';
-import { useTween } from 'turbo-tween/react';
-import { quadOut } from 'turbo-tween';
+import { useTween } from '@timbenniks/turbo-tween/react';
+import { quadOut } from '@timbenniks/turbo-tween';
 
 function AnimatedBox() {
   const ref = useRef<HTMLDivElement>(null);
@@ -985,8 +985,8 @@ interface TweenTimelineHandle {
 
 ```tsx
 import { useRef } from 'react';
-import { TweenTimeline, TweenFrom, TweenTo, type TweenTimelineHandle } from 'turbo-tween/react';
-import { cubicOut, backOut } from 'turbo-tween';
+import { TweenTimeline, TweenFrom, TweenTo, type TweenTimelineHandle } from '@timbenniks/turbo-tween/react';
+import { cubicOut, backOut } from '@timbenniks/turbo-tween';
 
 function IntroAnimation() {
   const tlRef = useRef<TweenTimelineHandle>(null);
@@ -1142,7 +1142,7 @@ DOM property parsing is skipped entirely on the server. No `getComputedStyle` ca
 
 ```ts
 // This code is safe in any environment. No guards needed.
-import { Tween, quadOut } from 'turbo-tween';
+import { Tween, quadOut } from '@timbenniks/turbo-tween';
 
 const tween = Tween.to(el, 1000, { x: 100, ease: quadOut });
 await tween; // resolves immediately on server, after animation on client
@@ -1159,7 +1159,7 @@ The key pattern: animate the object, then use `onUpdate` to render the current s
 ### Full example: animating a camera
 
 ```ts
-import { Tween, cubicInOut } from 'turbo-tween';
+import { Tween, cubicInOut } from '@timbenniks/turbo-tween';
 
 const camera = { x: 0, y: 0, zoom: 1 };
 
@@ -1201,7 +1201,7 @@ Tween.to(particle, 1500, {
 ### Example: animating game state with a timeline
 
 ```ts
-import { Timeline, sineInOut, cubicOut } from 'turbo-tween';
+import { Timeline, sineInOut, cubicOut } from '@timbenniks/turbo-tween';
 
 const state = { health: 100, shield: 50, score: 0 };
 
