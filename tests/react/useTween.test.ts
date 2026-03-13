@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { createElement, useEffect } from 'react';
+import { describe, it, expect } from 'vite-plus/test';
+import { createElement, useEffect, useRef } from 'react';
 import { render, act } from '@testing-library/react';
 import { useTween } from '../../src/react/useTween';
 import { linear } from '../../src/easings';
@@ -8,8 +8,14 @@ import { advanceTime } from '../setup';
 
 function TestComponent({ onApi }: { onApi: (api: ReturnType<typeof useTween>) => void }) {
   const api = useTween();
+  const apiRef = useRef(api);
+  const onApiRef = useRef(onApi);
+
+  apiRef.current = api;
+  onApiRef.current = onApi;
+
   useEffect(() => {
-    onApi(api);
+    onApiRef.current(apiRef.current);
   }, []);
   return createElement('div');
 }

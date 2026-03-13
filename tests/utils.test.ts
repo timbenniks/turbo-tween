@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vite-plus/test';
 import { clamp, noop, isObject, toKebabCase } from '../src/utils';
 
 describe('clamp', () => {

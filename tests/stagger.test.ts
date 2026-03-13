@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vite-plus/test';
 import { stagger } from '../src/stagger';
 import { quadIn } from '../src/easings';
 

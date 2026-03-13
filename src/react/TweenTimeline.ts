@@ -44,6 +44,9 @@ export const TweenTimeline = forwardRef<TweenTimelineHandle, TweenTimelineProps>
   function TweenTimeline({ autoPlay = true, defaults, onComplete, children }, ref) {
     const entriesRef = useRef<TweenEntry[]>([]);
     const timelineRef = useRef<Timeline | null>(null);
+    const latestRef = useRef({ autoPlay, defaults, onComplete });
+
+    latestRef.current = { autoPlay, defaults, onComplete };
 
     const register = useCallback<TimelineRegisterFn>((entry) => {
       entriesRef.current.push(entry);
@@ -60,7 +63,7 @@ export const TweenTimeline = forwardRef<TweenTimelineHandle, TweenTimelineProps>
     }));
 
     useEffect(() => {
-      const tl = new Timeline({ defaults });
+      const tl = new Timeline({ defaults: latestRef.current.defaults });
 
       for (const entry of entriesRef.current) {
         const target = entry.getTarget();
@@ -76,9 +79,9 @@ export const TweenTimeline = forwardRef<TweenTimelineHandle, TweenTimelineProps>
         }
       }
 
-      if (autoPlay) {
+      if (latestRef.current.autoPlay) {
         tl.play();
-        tl.then(() => onComplete?.());
+        void tl.then(() => latestRef.current.onComplete?.());
       }
 
       timelineRef.current = tl;

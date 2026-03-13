@@ -143,10 +143,9 @@ export class TweenEngine {
 
   /** Kill all active tweens */
   killAll(): void {
-    for (const tween of [...this.activeTweens]) {
-      tween.kill();
+    while (this.activeTweens.length > 0) {
+      this.activeTweens[this.activeTweens.length - 1]!.kill();
     }
-    this.activeTweens = [];
     this.checkIdle();
   }
 

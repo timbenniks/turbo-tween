@@ -31,21 +31,42 @@ export function TweenFromTo({
   const elRef = useRef<HTMLElement>(null);
   const register = useContext(TimelineContext);
   const { fromTo: tweenFromTo } = useTween();
+  const registerRef = useRef(register);
+  const latestRef = useRef({ duration, from, to, ease, delay, tweenFromTo });
+
+  registerRef.current = register;
+  latestRef.current = { duration, from, to, ease, delay, tweenFromTo };
 
   useEffect(() => {
-    if (register) {
-      register({
+    const timelineRegister = registerRef.current;
+    const current = latestRef.current;
+
+    if (timelineRegister) {
+      timelineRegister({
         mode: 'fromTo' as const,
         getTarget: () => elRef.current!,
-        duration,
-        getOptions: () => ({ ...to, ease, delay }),
-        getFromOptions: () => ({ ...from }),
+        duration: current.duration,
+        getOptions: () => ({
+          ...latestRef.current.to,
+          ease: latestRef.current.ease,
+          delay: latestRef.current.delay,
+        }),
+        getFromOptions: () => ({ ...latestRef.current.from }),
       });
       return;
     }
 
     if (elRef.current) {
-      tweenFromTo(elRef.current, duration, { ...from }, { ...to, ease, delay });
+      current.tweenFromTo(
+        elRef.current,
+        current.duration,
+        { ...current.from },
+        {
+          ...current.to,
+          ease: current.ease,
+          delay: current.delay,
+        },
+      );
     }
   }, []);
 

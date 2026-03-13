@@ -612,7 +612,13 @@ Tween.to(el, 1000, { x: 200, ease: myCubicOut });
 ## Vue Adapter (`@timbenniks/turbo-tween/vue`)
 
 ```ts
-import { useTween, TweenTo, TweenFrom, TweenFromTo, TweenTimeline } from '@timbenniks/turbo-tween/vue';
+import {
+  useTween,
+  TweenTo,
+  TweenFrom,
+  TweenFromTo,
+  TweenTimeline,
+} from '@timbenniks/turbo-tween/vue';
 ```
 
 ---
@@ -825,7 +831,13 @@ function replay() {
 ## React Adapter (`@timbenniks/turbo-tween/react`)
 
 ```tsx
-import { useTween, TweenTo, TweenFrom, TweenFromTo, TweenTimeline } from '@timbenniks/turbo-tween/react';
+import {
+  useTween,
+  TweenTo,
+  TweenFrom,
+  TweenFromTo,
+  TweenTimeline,
+} from '@timbenniks/turbo-tween/react';
 import type { TweenTimelineHandle } from '@timbenniks/turbo-tween/react';
 ```
 
@@ -960,12 +972,12 @@ Orchestrates child `<TweenTo>`, `<TweenFrom>`, and `<TweenFromTo>` components in
 
 **Props:**
 
-| Prop         | Type                                           | Default     | Description                                |
-| ------------ | ---------------------------------------------- | ----------- | ------------------------------------------ |
-| `autoPlay`   | `boolean`                                      | `true`      | Whether to start playback on mount.        |
-| `defaults`   | `{ duration?: number; ease?: EasingFunction }` | `undefined` | Default duration and easing for children.  |
+| Prop         | Type                                           | Default     | Description                                                                                            |
+| ------------ | ---------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------ |
+| `autoPlay`   | `boolean`                                      | `true`      | Whether to start playback on mount.                                                                    |
+| `defaults`   | `{ duration?: number; ease?: EasingFunction }` | `undefined` | Default duration and easing for children.                                                              |
 | `onComplete` | `() => void`                                   | `undefined` | Called when the timeline finishes playing (only fires if `autoPlay` is `true` or `play()` was called). |
-| `children`   | `ReactNode`                                    | --          | Child tween components.                    |
+| `children`   | `ReactNode`                                    | --          | Child tween components.                                                                                |
 
 **`TweenTimelineHandle` (ref interface):**
 
@@ -985,7 +997,12 @@ interface TweenTimelineHandle {
 
 ```tsx
 import { useRef } from 'react';
-import { TweenTimeline, TweenFrom, TweenTo, type TweenTimelineHandle } from '@timbenniks/turbo-tween/react';
+import {
+  TweenTimeline,
+  TweenFrom,
+  TweenTo,
+  type TweenTimelineHandle,
+} from '@timbenniks/turbo-tween/react';
 import { cubicOut, backOut } from '@timbenniks/turbo-tween';
 
 function IntroAnimation() {

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vite-plus/test';
 import { Timeline } from '../src/timeline';
 import { stagger } from '../src/stagger';
 import { linear, quadOut } from '../src/easings';
@@ -214,7 +214,7 @@ describe('Timeline', () => {
       tl.to(obj, 500, { value: 100, ease: linear });
 
       let resolved = false;
-      tl.then(() => {
+      void tl.then(() => {
         resolved = true;
       });
 
@@ -257,7 +257,7 @@ describe('Timeline', () => {
       tl.to(obj, 1000, { value: 100, ease: linear });
 
       let resolved = false;
-      tl.then(() => {
+      void tl.then(() => {
         resolved = true;
       });
 

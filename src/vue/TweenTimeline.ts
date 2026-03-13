@@ -58,7 +58,7 @@ export const TweenTimeline = defineComponent({
 
       if (props.autoPlay) {
         timeline.play();
-        timeline.then(() => emit('complete'));
+        void timeline.then(() => emit('complete'));
       }
     });
 

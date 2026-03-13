@@ -15,7 +15,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "types": ["vitest/globals"]
+    "types": ["vite-plus/test/globals"]
   },
   "include": ["src", "tests"]
 }

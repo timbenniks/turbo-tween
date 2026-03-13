@@ -29,20 +29,36 @@ export function TweenTo({
   const elRef = useRef<HTMLElement>(null);
   const register = useContext(TimelineContext);
   const { to: tweenTo } = useTween();
+  const registerRef = useRef(register);
+  const latestRef = useRef({ duration, to, ease, delay, tweenTo });
+
+  registerRef.current = register;
+  latestRef.current = { duration, to, ease, delay, tweenTo };
 
   useEffect(() => {
-    if (register) {
-      register({
+    const timelineRegister = registerRef.current;
+    const current = latestRef.current;
+
+    if (timelineRegister) {
+      timelineRegister({
         mode: 'to' as const,
         getTarget: () => elRef.current!,
-        duration,
-        getOptions: () => ({ ...to, ease, delay }),
+        duration: current.duration,
+        getOptions: () => ({
+          ...latestRef.current.to,
+          ease: latestRef.current.ease,
+          delay: latestRef.current.delay,
+        }),
       });
       return;
     }
 
     if (elRef.current) {
-      tweenTo(elRef.current, duration, { ...to, ease, delay });
+      current.tweenTo(elRef.current, current.duration, {
+        ...current.to,
+        ease: current.ease,
+        delay: current.delay,
+      });
     }
   }, []);
 

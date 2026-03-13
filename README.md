@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="turbo-tween.png" alt="Turbo-Tween" width="400">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="turbo-tween-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="turbo-tween.png">
+    <img src="turbo-tween.png" alt="Turbo-Tween" width="400">
+  </picture>
 </p>
 
 <h1 align="center">Turbo-Tween</h1>
@@ -24,6 +28,14 @@ pnpm add @timbenniks/turbo-tween
 # or
 yarn add @timbenniks/turbo-tween
 ```
+
+## Docs
+
+- [API reference](./docs/api.md)
+- [Migration from GSAP](./docs/migration-from-gsap.md)
+- [Tooling and workflow](./docs/tooling.md)
+- [Testing guide](./docs/testing.md)
+- [Contributing](./CONTRIBUTING.md)
 
 ## Quick Start
 
@@ -144,6 +156,26 @@ function AnimatedBox() {
   return <div ref={ref}>Animated</div>;
 }
 ```
+
+## Development
+
+If you are working on the Turbo-Tween repo itself, use the Vite+ workflow instead of calling tools directly.
+
+```bash
+vp install
+vp check
+vp test
+vp run build
+```
+
+Command guide:
+
+- `vp test` runs the Vitest suite
+- `vp run test:e2e` runs Playwright
+- `vp build` builds JavaScript bundles only
+- `vp run build` builds JavaScript bundles and declaration files
+
+See [docs/tooling.md](./docs/tooling.md) for the full contributor and agent workflow.
 
 ## API
 
@@ -363,10 +395,10 @@ Turbo-Tween is SSR-safe out of the box. On the server, all tween calls return no
 
 Measured with [size-limit](https://github.com/ai/size-limit) (minified + brotli):
 
-| Entry                | Size    |
-| -------------------- | ------- |
+| Entry                            | Size    |
+| -------------------------------- | ------- |
 | Core (`@timbenniks/turbo-tween`) | ~4.5 KB |
-| Core + timeline      | ~9 KB   |
+| Core + timeline                  | ~9 KB   |
 
 The Vue and React adapters add minimal overhead (~1 KB each) and re-use the core.
 

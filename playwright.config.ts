@@ -7,7 +7,7 @@ export default defineConfig({
     baseURL: 'http://localhost:4174',
   },
   webServer: {
-    command: 'pnpm vite --config tests/e2e/vite.e2e.config.ts --port 4174',
+    command: 'vp dev --config tests/e2e/vite.e2e.config.ts --port 4174',
     port: 4174,
     reuseExistingServer: !process.env.CI,
   },

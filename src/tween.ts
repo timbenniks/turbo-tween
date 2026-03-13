@@ -32,6 +32,10 @@ export interface TweenConfig {
   fromOptions?: Record<string, unknown>;
 }
 
+function toAnimatableValue(value: unknown): string | number | null {
+  return typeof value === 'string' || typeof value === 'number' ? value : null;
+}
+
 /**
  * Core Tween implementation with full playback control.
  * Implements TweenInstance interface + thenable for await support.
@@ -115,13 +119,20 @@ export class TweenCore implements TweenInstance {
       if (value === undefined || value === null) continue;
 
       if (isTransformShorthand(key)) {
+        const endTransformValue = toAnimatableValue(value);
+        if (endTransformValue === null) continue;
+
         this.hasTransforms = true;
-        const endValue = typeof value === 'number' ? value : parseFloat(String(value));
+        const endValue =
+          typeof endTransformValue === 'number' ? endTransformValue : parseFloat(endTransformValue);
         let startValue: number;
 
         if (this.mode === 'fromTo' && this.fromVars && key in this.fromVars) {
-          const fv = this.fromVars[key];
-          startValue = typeof fv === 'number' ? fv : parseFloat(String(fv));
+          const fromTransformValue = toAnimatableValue(this.fromVars[key]);
+          startValue =
+            typeof fromTransformValue === 'number'
+              ? fromTransformValue
+              : parseFloat(fromTransformValue ?? '0');
         } else if (this.mode === 'from') {
           // 'from' mode: value is the start, current state is the end
           const state = isElement(this.target) ? getTransformState(this.target) : null;
@@ -145,10 +156,10 @@ export class TweenCore implements TweenInstance {
 
         if (this.mode === 'from') {
           // 'from' mode: value is the starting point, animate to current
-          const currentVal = isElement(this.target)
+          const currentValue = isElement(this.target)
             ? getComputedStyle(this.target).getPropertyValue(key) || '0'
-            : String((this.target as Record<string, unknown>)[key] ?? 0);
-          const anim = createPropertyAnimation(this.target, key, currentVal, value);
+            : (toAnimatableValue((this.target as Record<string, unknown>)[key]) ?? 0);
+          const anim = createPropertyAnimation(this.target, key, currentValue, value);
           this.animations.push(anim);
         } else {
           const anim = createPropertyAnimation(this.target, key, value, fromVal);
